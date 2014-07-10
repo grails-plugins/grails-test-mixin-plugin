@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.codehaus.groovy.grails.compiler.injection.test
+package org.grails.compiler.injection.test
 
 import groovy.transform.CompileStatic
 import org.codehaus.groovy.transform.GroovyASTTransformation
@@ -25,7 +25,6 @@ import org.codehaus.groovy.control.SourceUnit
 import org.codehaus.groovy.ast.AnnotationNode
 import org.codehaus.groovy.ast.AnnotatedNode
 import org.codehaus.groovy.ast.ClassNode
-import grails.test.mixin.TestMixin
 import grails.test.mixin.integration.Integration
 import org.codehaus.groovy.ast.expr.ListExpression
 import org.codehaus.groovy.ast.expr.ClassExpression

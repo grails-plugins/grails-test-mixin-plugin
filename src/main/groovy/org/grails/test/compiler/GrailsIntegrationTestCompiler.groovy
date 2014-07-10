@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.codehaus.groovy.grails.test.compiler
+package org.grails.test.compiler
 
 import grails.test.mixin.integration.Integration
 import org.codehaus.groovy.control.CompilationUnit

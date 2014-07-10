@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.codehaus.groovy.grails.test.compiler;
+package org.grails.test.compiler;
 
 import grails.test.mixin.TestFor;
 import org.codehaus.groovy.control.CompilationUnit;
