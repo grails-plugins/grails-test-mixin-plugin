@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>5 Unit Testing Filters 3.3.0.BUILD-SNAPSHOT</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <div class="navTitle">
+        
+        Grails Test Mixins Plugin
+    </div>
+    <div class="navLinks">
+        <ul>
+            <li>
+                <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                    <a href="../guide/index.html" class="button">Table of contents</a>
+
+                    <div id="nav-summary-childs" style="display:none;">
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/introduction.html"><strong>1</strong><span>Introduction</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestingControllers.html"><strong>2</strong><span>Unit Testing Controllers</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestingTagLibraries.html"><strong>3</strong><span>Unit Testing Tag Libraries</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestingDomains.html"><strong>4</strong><span>Unit Testing Domains</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestingFilters.html"><strong>5</strong><span>Unit Testing Filters</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestingURLMappings.html"><strong>6</strong><span>Unit Testing URL Mappings</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/mockingCollaborators.html"><strong>7</strong><span>Mocking Collaborators</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/mockingCodecs.html"><strong>8</strong><span>Mocking Codecs</span></a>
+                        </div>
+                        
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/unitTestMetaprogramming.html"><strong>9</strong><span>Unit Test Metaprogramming</span></a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </li>
+            <li class="separator selected">
+                <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/unitTestingDomains.html">&lt;&lt; <strong>4</strong><span>Unit Testing Domains</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+                    <div class="toc-item next-right"><a href="../guide/unitTestingURLMappings.html"><strong>6</strong><span>Unit Testing URL Mappings</span> >></a></div>
+                
+
+
+                <div class="project">
+                    <h1>5 Unit Testing Filters</h1>
+
+                    <p><strong>Version:</strong> 3.3.0.BUILD-SNAPSHOT</p>
+                </div>
+
+                
+
+                
+
+<h1 id="unitTestingFilters">5 Unit Testing Filters</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/grails-plugins/grails-test-mixin-plugin/edit/master/src/main/docs/guide/unitTestingFilters.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div class="paragraph">
+<p>Unit testing filters is typically a matter of testing a controller where a filter is a mock collaborator. For example consider the following filters class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="type">class</span> <span class="class">CancellingFilters</span> {
+    <span class="keyword">def</span> filters = {
+        all(<span class="key">controller</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">simple</span><span class="delimiter">&quot;</span></span>, <span class="key">action</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>) {
+            before = {
+                redirect(<span class="key">controller</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>)
+                <span class="keyword">return</span> <span class="predefined-constant">false</span>
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This filter interceptors the <code>list</code> action of the <code>simple</code> controller and redirects to the <code>book</code> controller. To test this filter you start off with a test that targets the <code>SimpleController</code> class and add the <code>CancellingFilters</code> as a mock collaborator:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">grails.test.mixin.TestFor</span>
+<span class="keyword">import</span> <span class="include">grails.test.mixin.Mock</span>
+<span class="keyword">import</span> <span class="include">spock.lang.Specification</span>
+
+<span class="annotation">@TestFor</span>(SimpleController)
+<span class="annotation">@Mock</span>(CancellingFilters)
+<span class="type">class</span> <span class="class">SimpleControllerSpec</span> <span class="directive">extends</span> Specification {
+
+    <span class="comment">// ...</span>
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then implement a test that uses the <code>withFilters</code> method to wrap the call to an action in filter execution:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy"><span class="keyword">import</span> <span class="include">grails.test.mixin.TestFor</span>
+<span class="keyword">import</span> <span class="include">grails.test.mixin.Mock</span>
+<span class="keyword">import</span> <span class="include">spock.lang.Specification</span>
+
+<span class="annotation">@TestFor</span>(SimpleController)
+<span class="annotation">@Mock</span>(CancellingFilters)
+<span class="type">class</span> <span class="class">SimpleControllerSpec</span> <span class="directive">extends</span> Specification {
+
+    <span class="type">void</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">test list action is filtered</span><span class="delimiter">&quot;</span></span>() {
+        <span class="key">when</span>:
+        withFilters(<span class="key">action</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>) {
+            controller.list()
+        }
+
+        <span class="key">then</span>:
+        response.redirectedUrl == <span class="string"><span class="delimiter">'</span><span class="content">/book</span><span class="delimiter">'</span></span>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the <code>action</code> parameter is required because it is unknown what the action to invoke is until the action is actually called. The <code>controller</code> parameter is optional and taken from the controller under test. If it is another controller you are testing then you can specify it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">withFilters(<span class="key">controller</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">book</span><span class="delimiter">&quot;</span></span>,<span class="key">action</span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">list</span><span class="delimiter">&quot;</span></span>) {
+    controller.list()
+}</code></pre>
+</div>
+</div>
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/unitTestingDomains.html">&lt;&lt; <strong>4</strong><span>Unit Testing Domains</span></a></div>
+                
+                    <div class="toc-item next-right"><a href="../guide/unitTestingURLMappings.html"><strong>6</strong><span>Unit Testing URL Mappings</span> >></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>
