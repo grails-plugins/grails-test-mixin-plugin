@@ -1,0 +1,11 @@
+This project provides the now deprecated `@TestMixin` unit testing framework for Grails 3.x which has been replaced by the new Trait-based https://github.com/grails/grails-testing-support[Grails Test Support project].
+
+This project mainly exists for backwards compatibility and to ease upgrades for existing users.
+
+To install the test mixin library add the following dependency to the
+`dependencies` block of your `build.gradle` in a Grails application or plugin:
+
+[source,groovy,subs="attributes"]
+testCompile "org.grails:grails-test-mixins:{version}"
+
+
