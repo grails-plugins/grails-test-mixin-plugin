@@ -1,4 +1,8 @@
 language: groovy
+cache:
+  directories:
+  - "$HOME/.gradle"
+  - "$HOME/.m2/repository"
 sudo: false
 jdk:
 - oraclejdk7
