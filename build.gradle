@@ -1,28 +1,60 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "org.grails:grails-docs:$grailsVersion"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
+
+    }
+}
+
+group "org.grails"
+version = projectVersion
+
+ext {
+
+    userOrg = "grails"
+    isGrailsPlugin = false
+    isBuildSnapshot = version.toString().endsWith("-SNAPSHOT")
+    commonBuild = "https://raw.githubusercontent.com/grails/grails-common-build/cfd3bca16661cbb6fead6006715ea5ee26fb737a/"
+}
+
+apply from:"${commonBuild}/common-project.gradle"
+apply from:"${commonBuild}/common-publishing.gradle"
+
+
 dependencies {
 
-    compileOnly project(':grails-plugin-url-mappings'),
-                 project(':grails-plugin-databinding'),
-                 project(':grails-plugin-controllers'),
-                 project(':grails-plugin-domain-class'),             
-                 project(':grails-plugin-interceptors'),
-                 project(':grails-plugin-mimetypes'),
-                 project(':grails-plugin-rest'),
-                 project(':grails-plugin-codecs')
+    compileOnly  "org.grails:grails-plugin-url-mappings:$grailsVersion",
+                 "org.grails:grails-plugin-databinding:$grailsVersion",
+                 "org.grails:grails-plugin-controllers:$grailsVersion",
+                 "org.grails:grails-plugin-domain-class:$grailsVersion",             
+                 "org.grails:grails-plugin-interceptors:$grailsVersion",
+                 "org.grails:grails-plugin-mimetypes:$grailsVersion",
+                 "org.grails:grails-plugin-rest:$grailsVersion",
+                 "org.grails:grails-plugin-codecs:$grailsVersion"
 
     compile "org.grails:grails-web-jsp:$gspVersion"
 
     compileOnly "org.grails.plugins:gsp:$gspVersion"
     compileOnly "org.grails.plugins:converters:$legacyConvertersVersion"
+    compile "org.grails.plugins:async:$asyncVersion"
 
-    compile ( project(':grails-test') ) {
+    compile ( "org.grails:grails-test:$grailsVersion" ) {
         exclude group: 'org.grails', module:'grails-web'
         exclude group: 'org.grails', module:'grails-plugin-mimetypes'
     }
-    compile("org.grails:grails-datastore-gorm-test:$datastoreVersion")
-    compile ( project(':grails-logging') ) {
+    compile("org.grails:grails-datastore-gorm-test:$gormVersion")
+    compile ( "org.grails:grails-logging:$grailsVersion" ) {
         exclude group: 'org.grails', module:'grails-web'
     }
-    compile "org.grails:grails-async:$asyncVersion"
+    
+    compile "javax.servlet:javax.servlet-api:$servletApiVersion"
 
     compile("org.springframework:spring-test:${springVersion}") {
         exclude group: 'commons-logging', module:'commons-logging'
@@ -44,16 +76,7 @@ dependencies {
 
     runtime "cglib:cglib:${cglibVersion}"
 
-    provided "org.apache.ant:ant:${antVersion}"
 }
 
-eclipse {
-    classpath {
-       file {
-           whenMerged { classpath ->
-                // greclipse doesn't support ASTs and tests in same project, exclude those tests
-                classpath.entries.find { entry -> entry.kind == 'src' && entry.path == "src/test/groovy" }?.excludes=["grails/test/mixin/MetaClassCleanupSpec.groovy"]
-           }
-       }
-    }
-}
+
+
