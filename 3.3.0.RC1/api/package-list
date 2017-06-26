@@ -1,0 +1,11 @@
+grails.test.mixin
+grails.test.mixin.domain
+grails.test.mixin.integration
+grails.test.mixin.services
+grails.test.mixin.support
+grails.test.mixin.web
+grails.test.mixin.webflow
+grails.test.runtime
+org.grails.compiler.injection.test
+org.grails.test.context.junit4
+org.grails.test.mixin.support
