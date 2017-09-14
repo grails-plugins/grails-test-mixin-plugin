@@ -5,7 +5,7 @@ cache:
   - "$HOME/.m2/repository"
 sudo: false
 jdk:
-- oraclejdk7
+- oraclejdk8
 env:
   global:
   - TERM=dumb

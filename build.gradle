@@ -29,6 +29,9 @@ apply from:"${commonBuild}/common-publishing.gradle"
 apply from:"${commonBuild}/common-docs.gradle"
 apply plugin: "io.spring.dependency-management"
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 if(project.hasProperty('grailsVersion')) {
     dependencyManagement {
          imports {
